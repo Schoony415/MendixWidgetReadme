@@ -1,6 +1,8 @@
 # Pull up a seat
+
 #### Documented by Josh Schoonover the Intern
-This will be the documentation with links on creating a widget in 2024 with all the difficultys of working with depercated libraries.
+
+This will be the documentation with links on creating a map widget in 2024 with all the difficultys of working with depercated libraries.
 
 ## NPM and Node.js
 
@@ -24,13 +26,20 @@ I have found mixed success in editing the `.config` to address my file paths as 
 
 To get around npm wanting to use different locations for where to find node, you must always point it at the "local".  
 This can be checked with `> npm config ls -l`. Check the variables that say they can be overwritten by `global`, and check the file path of `$PREFIX`, it should match your documents folder.  
+
 To properly point your npm use on every command:
 ```shell
 npm *commands* --globalconfig $PREFIX/etc/npmrc
 ```
 Reference can be checked at the npm [page here](https://docs.npmjs.com/cli/v10/using-npm/config)
 
-When creating the Map widget, because of the size of the ESRI modules I did have to get an admin to put node.js on my computer. When compiling the widget, the process would peak at 5gb of ram. 
+If npm runs out of ram while trying to run you can use `--max_old_space_size=#` to increase it. I have not successfully found a place to put this command that will increase it past 1gb of ram. It seems to be a built in cap to the portable version. I have attached a error below showing the max bound that you may use. It is supposed to be in mb, however it was acting as though it was using bytes as the number.
+
+```shell
+Error: Value for flag --max_old_space_size=5120000000 of type size_t is out of bounds [0-4294967295]
+```
+
+When creating the Map widget, because of the size of the ESRI modules I did have to get an admin to put node.js on my computer. When compiling the widget, the process would peak at 5gb of ram. I suspect this is soley due to ESRI's package size.
 
 ## Getting setup with creating a widget
 ### Guides I started with
@@ -42,7 +51,7 @@ When creating the Map widget, because of the size of the ESRI modules I did have
 > ```
 > reference [here](https://docs.npmjs.com/cli/v7/commands/npx)
 
-#### Where to get the Mindex Template
+#### Where to get the Mendix Template
 There is a Widget Generator on npm [here](https://www.npmjs.com/package/@mendix/generator-widget) that will get you started. Use `npx` or `npm exec` as your situation allows.  
 Give your app a good name, and Bippity Boppity Boop you are off to the races. `cd` into your new folder and get started.
 
@@ -59,10 +68,49 @@ TS allows you to add typing to standard javascript. [Typescript website has a go
 
 ## Rollup
 
-Rollup is what is the library that comes with Mendix widgets to orchistrate and compile the code into a widget format. It uses it's own plugins to get some of the jobs done. 
+Rollup is what is the library that comes with Mendix widgets to orchistrate and compile the code into a widget format. It uses it's own plugins to get some of the jobs done. I suggest messing with it as little as possible until things don't compile because of rollup errors. Once you start overwritting it, you will have to put in a lot of work.
 
 https://dev.to/proticm/how-to-setup-rollup-config-45mk  
 https://rollupjs.org/configuration-options/  
+
+Inside your `rollup.config.js` file:  
+```javascript
+export default args => {
+    const result = args.configDefaultConfig;
+    console.warn ('Custom roll up')
+    
+    return result.map((config) => {
+      /* Your pre-plugin changes go here*/
+      const plugins = config.plugins || []
+      config.plugins = [
+        ...plugins,
+        /* your plugin changes go here */
+      ]
+      return config;
+    });
+};
+```
+
+## Adjusting the XML to talk with Mendix
+
+You can create attributes and data inputs using the `./src/appName.xml`. It can be picky but you can nest `<propertyGroup>` to create some nice menues in Mendix. Roughly speaking you will only be given feedback on format of properties when you try to put your widget into mendix. 
+
+To link a variable and then the attributes on that variable can be complex, the key is using the `dataSource=nameofdatasource` option on a property to link back to the `type=datasource`.
+
+```xml
+<property key="ListOfPoints" type="datasource" isList="true" required="false">
+  <caption>Point Layer List</caption>
+  <description/>
+</property>
+
+<property key="PointName" type="attribute" required="false" dataSource="ListOfPoints">
+  <caption>Point Names</caption>
+  <description>The name to tie to your points</description>
+  <attributeTypes>
+    <attributeType name="String"/>
+  </attributeTypes>
+</property>
+```
 
 ## Learn about layers in arc
 
@@ -73,20 +121,6 @@ https://developers.arcgis.com/javascript/latest/tutorials/add-a-point-line-and-p
 https://developers.arcgis.com/javascript/latest/api-reference/esri-layers-FeatureLayer.html
 
 
-
-## Hold this
-
-`npm run build --globalconfig $PREFIX/etc/npmrc`
-
-`--max_old_space_size=4096`
-`set NODE_OPTIONS=--max_old_space_size=8192`
-setx NODE_OPTIONS --max-old-space-size=8192
-
-4096000000
-4294967294
-```shell
-Error: Value for flag --max_old_space_size=5120000000 of type size_t is out of bounds [0-4294967295]
-```
 
 
 ## Geocode links
