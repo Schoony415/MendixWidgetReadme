@@ -161,6 +161,45 @@ For getting from just an attribute will look similar.
 
 
 
+
+### Having a callback function
+
+If you want a widget to setoff a flow on Mendix, it's fairly simple. 
+
+```xml
+<property key="callBackAction" type="action" required="false">
+  <caption>After Action</caption>
+  <description>If a Mendix action should happen after a doing a thing</description>
+</property>
+```
+
+On the Mendix side you can load several things into an action. I just used a Micorflow
+
+```typescript
+callBackAction?: ActionValue;
+```
+
+Typescript will call this new friend an `ActionValue` which only has a few properties on it. Online says that the `isExecuting` can be unreliable because of the complexity of what might actually be happening on the Mendix side.  
+We will treat the callback similar to our getters and setters. 
+
+```typescript
+const [doAction, setDoAction] = useState<boolean>(false);
+
+useEffect(()=>{
+  // first check if you want to do the thing and the thing is ready to do
+  if(!(doAction && callBackAction && callBackAction.canExecute)){return;}
+  // set your state back, and kick off to Mendix
+  setDoAction(false)
+  callBackAction.execute()
+},[doAction, callBackAction?.canExecute])
+
+// code that will want to queue up my action to mendix
+setDoAction(true)
+```
+
+
+
+
 ## Learn about layers in arc
 
 https://developers.arcgis.com/javascript/latest/api-reference/esri-layers-Layer.html
