@@ -159,8 +159,35 @@ For getting from just an attribute will look similar.
 
 ### Using Setters to give back to Mendix
 
+To give your data back to Mendix, the best way is to use a state that and then wait for Mendix to be ready. We will once again check for status to be available. It will look a lot like the getter.
 
+Below will be an example of multiple grouped attributes to a no persistant Mendix object, so not a list. We use `Partial<>` becuae we will be undefining the items as we set them.
 
+```typescript
+export function WidgetName({
+  EventName // EditableValue<string>;
+  EventTime // EditableValue<Big>;
+}:WidgetNameProps): ReactElement{
+
+  const [holdthis, setHoldthis] = useState<
+    Partial<{name: string, time: number}> & { doAction: boolean }
+  >();
+
+  useEffect(()=>{
+    if(!(holdthis && hodlthis.name && EventName.status === "available")){return;}
+
+    EventName.setValue(holdthis.name)
+    setHoldthis({...holdthis, name: undefined})
+  
+  },[ holdthis?.name && EventName] )
+
+  /*
+    Code that will setup holdthis when we want data to go back to Mendix
+  */
+}
+```
+
+I have not foudn a good way to set an item in a Mendix list yet.
 
 ### Having a callback function
 
@@ -199,28 +226,13 @@ setDoAction(true)
 
 
 
+## Mindex data types for javascript
 
-## Learn about layers in arc
+https://docs.mendix.com/apidocs-mxsdk/apidocs/pluggable-widgets-property-types/#datasource
 
-https://developers.arcgis.com/javascript/latest/api-reference/esri-layers-Layer.html
+https://docs.mendix.com/apidocs-mxsdk/apidocs/pluggable-widgets-client-apis-list-values/#listvalue
 
-https://developers.arcgis.com/javascript/latest/tutorials/add-a-point-line-and-polygon/
-
-https://developers.arcgis.com/javascript/latest/api-reference/esri-layers-FeatureLayer.html
-
-
-
-
-## Geocode links
-
-reverse geocoding  
-https://developers.arcgis.com/documentation/mapping-apis-and-services/geocoding/reverse-geocoding/  
-tutorial  
-https://developers.arcgis.com/javascript/latest/tutorials/reverse-geocode/  
-react arc map  
-https://developers.arcgis.com/javascript/latest/components-get-started-react/  
-template?  
-https://github.com/Esri/arcgis-maps-sdk-javascript-samples-beta/tree/main/packages/map-components/templates/react  
+https://docs.mendix.com/refguide/data-sources/#list-widgets
 
 ## Guides from a rather smart fellow:  
 
@@ -238,19 +250,30 @@ https://www.mendix.com/blog/build-widgets-in-mendix-with-react-part-4-arcgis-map
  
 https://www.mendix.com/blog/build-widgets-in-mendix-with-react-part-5-running-webassembly-in-mendix/
 
+## Learn about layers in arc
+
+https://developers.arcgis.com/javascript/latest/api-reference/esri-layers-Layer.html
+
+https://developers.arcgis.com/javascript/latest/tutorials/add-a-point-line-and-polygon/
+
+https://developers.arcgis.com/javascript/latest/api-reference/esri-layers-FeatureLayer.html
+
+## Geocode links
+
+reverse geocoding  
+https://developers.arcgis.com/documentation/mapping-apis-and-services/geocoding/reverse-geocoding/  
+tutorial  
+https://developers.arcgis.com/javascript/latest/tutorials/reverse-geocode/  
+react arc map  
+https://developers.arcgis.com/javascript/latest/components-get-started-react/  
+template?  
+https://github.com/Esri/arcgis-maps-sdk-javascript-samples-beta/tree/main/packages/map-components/templates/react  
+
 ## To learn more about mapping
 
 Lat Lon percision  
 https://gis.stackexchange.com/questions/8650/measuring-accuracy-of-latitude-and-longitude  
 https://www.explainxkcd.com/wiki/index.php/2170:_Coordinate_Precision  
-
-## Mindex data types for javascript
-
-https://docs.mendix.com/apidocs-mxsdk/apidocs/pluggable-widgets-property-types/#datasource
-
-https://docs.mendix.com/apidocs-mxsdk/apidocs/pluggable-widgets-client-apis-list-values/#listvalue
-
-https://docs.mendix.com/refguide/data-sources/#list-widgets
 
 ```typescript
 ```
