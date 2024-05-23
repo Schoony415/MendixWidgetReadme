@@ -41,8 +41,8 @@ Error: Value for flag --max_old_space_size=5120000000 of type size_t is out of b
 
 When creating the Map widget, because of the size of the ESRI modules I did have to get an admin to put node.js on my computer. When compiling the widget, the process would peak at 5gb of ram. I suspect this is soley due to ESRI's package size.
 
-## Getting setup with creating a widget
-### Guides I started with
+## Getting setup with creating a widget  
+### Guides I started with  
 
 > #### Quick Note
 > When you are using portable NPM you can't run `npx` because it isn't able to be overridden. You must use `npm exec` and tag in your global. The example will be 
@@ -134,7 +134,8 @@ PointName
 }
 ```
 
-### Using getters to grab your data
+## Pulling and Pushing Data to Mendix  
+### Using getters to grab your data  
 
 There is two ways to handle the Mendix data in ts, in both cases you should check the status of the data before you grab it. I found useEffect the best way to complete this.
 
