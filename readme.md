@@ -156,7 +156,16 @@ useEffect(()=>{
 ```
 In the above code I am telling typescript that I am gueanteeing values in places that I am using `!`. You should put in a few if checks to make sure the user has infact filled in your fields on the Mendix side.
 
-For getting from just an attribute will look similar.
+For getting from just a base type will look similar. With a base type you don't need to check availiability.
+
+```typescript
+// pulling in prettyText from Mendix as string
+const [textToStyle, setTextToStyle] = useState<string>();
+
+useEffect(()=>{
+  setTextToStyle(prettyText)
+},[prettyText])
+```
 
 ### Using Setters to give back to Mendix
 
