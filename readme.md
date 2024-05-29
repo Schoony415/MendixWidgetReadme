@@ -9,6 +9,8 @@ This will be the documentation with links on creating a map widget in 2024 with 
 For Node.js on Windows I have used the following installer:  
 https://nodejs.org/en/download/prebuilt-installer/current
 
+### Portable Node 
+Skip this section if the above works for you.  
 If you don't have admin, you will be required to use a portable version. I have had the best of luck with this:
 
 Download Linke:
@@ -43,6 +45,11 @@ Error: Value for flag --max_old_space_size=5120000000 of type size_t is out of b
 ```
 
 When creating the Map widget, because of the size of the ESRI modules I did have to get an admin to put node.js on my computer. When compiling the widget, the process would peak at 5gb of ram. I suspect this is solely due to ESRI's package size.
+
+## Git
+
+If you are going to be using git to track changes, the desktop app works well for windows. You can find it here:  
+https://desktop.github.com/
 
 ## Getting setup with creating a widget  
 ### Guides I started with  
