@@ -6,6 +6,9 @@ This will be the documentation with links on creating a map widget in 2024 with 
 
 ## NPM and Node.js
 
+For Node.js on Windows I have used the following installer:  
+https://nodejs.org/en/download/prebuilt-installer/current
+
 If you don't have admin, you will be required to use a portable version. I have had the best of luck with this:
 
 Download Linke:
